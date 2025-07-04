@@ -32,4 +32,11 @@ The **Color Palette Generator** is a web-based tool that allows users to generat
 - The app listens for user events (clicks, locks, etc.) and dynamically updates the DOM.
 - Saved palettes and theme preferences are stored using `localStorage`.
 
+---
+
+## 🛠️ Built With
+
+- **HTML** – Markup structure for content display
+- **CSS** – Styling and layout (with transitions and variables)
+- **JavaScript (Vanilla)** – All app logic (DOM manipulation, events, color generation, local storage)
 
