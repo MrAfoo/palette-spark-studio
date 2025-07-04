@@ -1,4 +1,3 @@
-
 export const generateRandomColor = (): string => {
   const letters = '0123456789ABCDEF';
   let color = '#';
@@ -22,6 +21,45 @@ export const getContrastColor = (hexColor: string): string => {
   const b = parseInt(hexColor.slice(5, 7), 16);
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
   return brightness > 128 ? '#000000' : '#FFFFFF';
+};
+
+export const getContrastRatio = (color1: string, color2: string): number => {
+  const getLuminance = (hex: string): number => {
+    const r = parseInt(hex.slice(1, 3), 16) / 255;
+    const g = parseInt(hex.slice(3, 5), 16) / 255;
+    const b = parseInt(hex.slice(5, 7), 16) / 255;
+
+    const getRGB = (value: number) => {
+      return value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+    };
+
+    return 0.2126 * getRGB(r) + 0.7152 * getRGB(g) + 0.0722 * getRGB(b);
+  };
+
+  const lum1 = getLuminance(color1);
+  const lum2 = getLuminance(color2);
+  const brightest = Math.max(lum1, lum2);
+  const darkest = Math.min(lum1, lum2);
+
+  return (brightest + 0.05) / (darkest + 0.05);
+};
+
+export const getAccessibilityLevel = (ratio: number): { level: string; isAccessible: boolean } => {
+  if (ratio >= 7) return { level: 'AAA', isAccessible: true };
+  if (ratio >= 4.5) return { level: 'AA', isAccessible: true };
+  if (ratio >= 3) return { level: 'AA Large', isAccessible: true };
+  return { level: 'Fail', isAccessible: false };
+};
+
+export const isValidHexColor = (hex: string): boolean => {
+  return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex);
+};
+
+export const expandHexColor = (hex: string): string => {
+  if (hex.length === 4) {
+    return '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+  }
+  return hex;
 };
 
 export const saveFavoritePalette = (colors: string[]): void => {
